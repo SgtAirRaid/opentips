@@ -29,15 +29,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements-dev.txt
+          python -m pip install cx_Freeze
 
       - name: Run tests
         run: |
           python -m pytest test/
 
-      # - name: Build executable
-      #   run: |
-      #     pip install ".[exe]"
-      #     python setup.py build
+      - name: Create Windows executable
+        if: runner.os == 'Windows'
+        run: |
+          cmd /c scripts/build_exe.bat
+
+      - name: Create macOS executable
+        if: runner.os == 'macOS'
+        run: |
+          ./scripts/build_exe.sh
 
       # - name: Sign Windows Build
       #   if: runner.os == 'Windows'
